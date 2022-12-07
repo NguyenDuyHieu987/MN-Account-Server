@@ -65,7 +65,11 @@ class BankAccountController {
 
   addAccount(req, res, next) {
     try {
-      const sql = `INSERT INTO bank_account (id, name, phone, iban, pin, address, balance, email, date) VALUES (${req.body.id}, '${req.body.name}', '${req.body.phone}', '${req.body.iban}', '${req.body.pin}', '${req.body.address}', ${req.body.balance}, '${req.body.email}', '${req.body.date}');`;
+      const sql =
+        req.body.id.length == 0
+          ? `INSERT INTO bank_account (name, phone, iban, pin, address, balance, email, date) VALUES ('${req.body.name}', '${req.body.phone}', '${req.body.iban}', '${req.body.pin}', '${req.body.address}', ${req.body.balance}, '${req.body.email}', '${req.body.date}');`
+          : `INSERT INTO bank_account (id, name, phone, iban, pin, address, balance, email, date) VALUES (${req.body.id}, '${req.body.name}', '${req.body.phone}', '${req.body.iban}', '${req.body.pin}', '${req.body.address}', ${req.body.balance}, '${req.body.email}', '${req.body.date}');`;
+
       db.query(sql, (err, response) => {
         if (err) res.json({ success: false });
         else res.json({ success: true });
