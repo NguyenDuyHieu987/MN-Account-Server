@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const userController = require('../app/controllers/UserController');
+const authController = require('../app/controllers/AuthController');
 
 // router.get('/:slug', tvController.detail);
-router.get('/login', userController.login);
+router.post('/login', authController.login);
 
 module.exports = router;

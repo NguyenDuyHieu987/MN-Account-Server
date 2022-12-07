@@ -3,12 +3,48 @@ const db = require('../../config/db');
 class BankAccountController {
   getAllAccount(req, res, next) {
     try {
-      const sql = `SELECT * FROM bank_account LIMIT 10 OFFSET ${
-        req.query.page * 10
-      }`;
+      const sql = `SELECT * FROM bank_account LIMIT ${
+        req.query.showentries
+      } OFFSET ${req.query.page * req.query.showentries}`;
       db.query(sql, (err, response) => {
         if (err) next(err);
-        res.json(response);
+        else res.json(response);
+      });
+    } catch (error) {
+      res.status(400).json({ message: 'Error 404' });
+    }
+  }
+
+  getDetailAccount(req, res, next) {
+    try {
+      const sql = `SELECT * FROM bank_account WHERE id = ${req.query.id}`;
+      db.query(sql, (err, response) => {
+        if (err) next(err);
+        else res.json(response[0]);
+      });
+    } catch (error) {
+      res.status(400).json({ message: 'Error 404' });
+    }
+  }
+
+  searchAccount(req, res, next) {
+    try {
+      const sql = `SELECT * FROM bank_account WHERE
+        id LIKE '%${req.query.id}%' OR
+        name LIKE '%${req.query.name}%' OR
+        phone LIKE '%${req.query.phone}%' OR
+        iban LIKE '%${req.query.iban}%' OR
+        pin LIKE '%${req.query.pin}%' OR
+        address LIKE '%${req.query.address}%' OR
+        balance LIKE '%${req.query.balance}%' OR
+        email LIKE '%${req.query.email}%' OR
+        date LIKE '%${req.query.date}%'
+        LIMIT ${req.query.showentries} OFFSET ${
+        req.query.page * req.query.showentries
+      };`;
+      db.query(sql, (err, response) => {
+        if (err) next(err);
+        else res.json(response);
       });
     } catch (error) {
       res.status(400).json({ message: 'Error 404' });
@@ -20,7 +56,7 @@ class BankAccountController {
       const sql = 'SELECT COUNT(*) AS result FROM bank_account';
       db.query(sql, (err, response) => {
         if (err) next(err);
-        res.json(response[0]);
+        else res.json(response[0]);
       });
     } catch (error) {
       res.status(400).json({ message: 'Error 404' });
@@ -29,13 +65,13 @@ class BankAccountController {
 
   addAccount(req, res, next) {
     try {
-      const sql = `INSERT INTO bank_account (id, name, phone, iban, pin, address, balance, email, date) VALUES ('${req.body.name}', '${req.body.phone}', '${req.body.iban}', '${req.body.pin}', '${req.body.address}', ${req.body.balance}, '${req.body.email}', '${req.body.date}') `;
+      const sql = `INSERT INTO bank_account (id, name, phone, iban, pin, address, balance, email, date) VALUES (${req.body.id}, '${req.body.name}', '${req.body.phone}', '${req.body.iban}', '${req.body.pin}', '${req.body.address}', ${req.body.balance}, '${req.body.email}', '${req.body.date}');`;
       db.query(sql, (err, response) => {
         if (err) res.json({ success: false });
-        res.json({ success: true });
+        else res.json({ success: true });
       });
     } catch (error) {
-      res.status(400).json({ message: 'Error 404' });
+      res.status(400).json({ message: 'Error' });
     }
   }
 
@@ -44,10 +80,10 @@ class BankAccountController {
       const sql = `UPDATE bank_account SET name = '${req.body.name}', phone = '${req.body.phone}', iban = '${req.body.iban}', pin = '${req.body.pin}', address = '${req.body.address}', balance = ${req.body.balance}, email = '${req.body.email}', date = '${req.body.date}' WHERE id = ${req.body.id}`;
       db.query(sql, (err, response) => {
         if (err) res.json({ success: false });
-        res.json({ success: true });
+        else res.json({ success: true });
       });
     } catch (error) {
-      res.status(400).json({ message: 'Error 404' });
+      res.status(400).json({ message: 'Error' });
     }
   }
 
@@ -56,10 +92,10 @@ class BankAccountController {
       const sql = `DELETE FROM bank_account WHERE id = ${req.body.id}`;
       db.query(sql, (err, response) => {
         if (err) res.json({ success: false });
-        res.json({ success: true });
+        else res.json({ success: true });
       });
     } catch (error) {
-      res.status(400).json({ message: 'Error 404' });
+      res.status(400).json({ message: 'Error' });
     }
   }
 }
