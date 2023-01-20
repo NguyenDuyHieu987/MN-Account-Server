@@ -15,6 +15,18 @@ class BankAccountController {
     }
   }
 
+  getAllAccount1(req, res, next) {
+    try {
+      const sql = `SELECT * FROM bank_account`;
+      db.query(sql, (err, response) => {
+        if (err) next(err);
+        else res.json(response);
+      });
+    } catch (error) {
+      res.status(400).json({ message: 'Error 404' });
+    }
+  }
+
   getDetailAccount(req, res, next) {
     try {
       const sql = `SELECT * FROM bank_account WHERE id = ${req.query.id}`;
@@ -81,7 +93,16 @@ class BankAccountController {
 
   updateAccount(req, res, next) {
     try {
-      const sql = `UPDATE bank_account SET name = '${req.body.name}', phone = '${req.body.phone}', iban = '${req.body.iban}', pin = '${req.body.pin}', address = '${req.body.address}', balance = ${req.body.balance}, email = '${req.body.email}', date = '${req.body.date}' WHERE id = ${req.body.id}`;
+      const sql = `UPDATE bank_account SET name = '${
+        req.body.name
+      }', phone = '${req.body.phone}', iban = '${req.body.iban}', pin = '${
+        req.body.pin
+      }', address = '${req.body.address}', balance = ${
+        req.body.balance
+      }, email = '${req.body.email}', date = '${req.body.date.slice(
+        0,
+        10
+      )}' WHERE id = ${req.body.id}`;
       db.query(sql, (err, response) => {
         if (err) res.json({ success: false });
         else res.json({ success: true });

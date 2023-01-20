@@ -5,6 +5,7 @@ const bankaccountController = require('../app/controllers/BankAccountController'
 
 // router.get('/:slug', tvController.detail);
 router.get('/getallaccount', bankaccountController.getAllAccount);
+router.get('/getallaccount1', bankaccountController.getAllAccount1);
 router.get('/getdetailaccount', bankaccountController.getDetailAccount);
 router.get('/searchaccount', bankaccountController.searchAccount);
 router.get('/getnumberofaccount', bankaccountController.getNumberOfAccounts);
