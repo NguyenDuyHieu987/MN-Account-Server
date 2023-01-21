@@ -8,6 +8,7 @@ router.get('/getallaccount', bankaccountController.getAllAccount);
 router.get('/getallaccount1', bankaccountController.getAllAccount1);
 router.get('/getdetailaccount', bankaccountController.getDetailAccount);
 router.get('/searchaccount', bankaccountController.searchAccount);
+router.get('/searchaccount1', bankaccountController.searchAccount1);
 router.get('/getnumberofaccount', bankaccountController.getNumberOfAccounts);
 router.post('/addaccount', bankaccountController.addAccount);
 router.post('/updateaccount', bankaccountController.updateAccount);

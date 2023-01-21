@@ -63,6 +63,27 @@ class BankAccountController {
     }
   }
 
+  searchAccount1(req, res, next) {
+    try {
+      const sql = `SELECT * FROM bank_account WHERE
+        id LIKE '%${req.query.query}%' OR
+        name LIKE '%${req.query.query}%' OR
+        phone LIKE '%${req.query.query}%' OR
+        iban LIKE '%${req.query.query}%' OR
+        pin LIKE '%${req.query.query}%' OR
+        address LIKE '%${req.query.query}%' OR
+        balance LIKE '%${req.query.query}%' OR
+        email LIKE '%${req.query.query}%' OR
+        date LIKE '%${req.query.query}%';`;
+      db.query(sql, (err, response) => {
+        if (err) next(err);
+        else res.json(response);
+      });
+    } catch (error) {
+      res.status(400).json({ message: 'Error 404' });
+    }
+  }
+
   getNumberOfAccounts(req, res, next) {
     try {
       const sql = 'SELECT COUNT(*) AS result FROM bank_account';
